@@ -1,42 +1,157 @@
-#root {
-  max-width: 1280px;
+/* アプリ全体のコンテナ */
+.app-container {
+  display: flex;
+  max-width: 900px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  padding: 10px;
+  box-sizing: border-box;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* メニューパネル（左端） */
+.menu-panel {
+  flex-shrink: 0; /* 縮まないようにする */
+  width: 120px; /* メニューの固定幅 */
+  padding: 10px;
+  border-right: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* メニューボタンの基本スタイル */
+.menu-panel button {
+  width: 100%;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.2s;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+/* 選択されたメニューボタンのスタイル */
+.menu-panel button.selected {
+  background-color: #deb887;
+  font-weight: bold;
 }
 
-.card {
-  padding: 2em;
+/* カテゴリリスト（真ん中） */
+.left-panel {
+  flex: 1; /* 残りのスペースを均等に割り当てる */
+  padding-right: 20px;
+  padding-left: 20px;
 }
 
-.read-the-docs {
-  color: #888;
+/* 記録パネル（右端） */
+.right-panel {
+  flex: 2; /* カテゴリリストの2倍の幅を占める */
+  padding: 20px;
+  border-left: 1px solid #ccc;
+}
+
+/* --- ここから下のスタイルは既存のものを維持 --- */
+
+/* 各カテゴリ全体を囲む枠 */
+.category-container {
+  margin-bottom: 40px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+/* カテゴリのヘッダー部分（タイトルと削除ボタンの行） */
+.category-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #deb887;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+/* カテゴリのタイトル文字 */
+.category-title {
+  font-weight: bold;
+  color: #000;
+}
+
+/* 展開/折りたたみアイコン */
+.toggle-icon {
+  margin-right: 10px;
+}
+
+/* カテゴリ削除ボタン */
+.delete-category-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  color: #000;
+  border: 2px solid #000;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.delete-category-btn:hover {
+  background-color: #000;
+  color: #fff;
+}
+
+/* タスク一覧全体 */
+.items-container {
+  padding: 10px 0;
+  background: #fff;
+}
+
+/* 各タスクの1行 */
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  margin-left: 20px;
+  border-left: 1px solid #ccc;
+}
+
+/* タスク名 */
+.item-name {
+  color: #007bff;
+  text-decoration: underline;
+}
+
+/* タスク削除ボタン */
+.delete-item-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  color: #000;
+  border: 1.5px solid #000;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.delete-item-btn:hover {
+  background-color: #000;
+  color: #fff;
+}
+
+/* カテゴリ追加フォーム、タスク追加フォーム */
+.add-category-form,
+.add-item-form {
+  display: flex;
+  gap: 5px;
+  margin-top: 10px;
 }

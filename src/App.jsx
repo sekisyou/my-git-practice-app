@@ -1,72 +1,174 @@
 import { useState } from "react";
-// importするところ
+import "./App.css";
+import Category from "./Category";
+import RecordPanel from "./RecordPanel";
 
 function App() {
-  const [cards, setCards] = useState([
-    { id: crypto.randomUUID(), text: "仕事", memos: [] },
-    { id: crypto.randomUUID(), text: "プライベート", memos: [] },
-    { id: crypto.randomUUID(), text: "買い物", memos: [] },
-  ]);
-  const [inputValue, setInputValue] = useState("");
-  // 変数・関数を書くところ
-  // 「仕事」「プライベート」「買い物」の項目を作成
-  const [memoValue, setMemoValue] = useState("");
-  const [selectedCardId, setSelectedCardId] = useState("null");
-
-  const handleAddCard = () => {
-    const newCard = { id: crypto.randomUUID(), text: inputValue, memos: [] };
-    const newCards = [...cards, newCard];
-    setCards(newCards); //新しい入力を可能にする
-    setInputValue(""); // 入力欄をクリア
-  };
-  //追加ボタンを押したときの処理
-
-  const handleDeleteCard = (idToDelete) => {
-    const newCards = cards.filter((card) => card.id !== idToDelete);
-    setCards(newCards);
-  };
-  //削除ボタンを押したときの処理
-
-  const handleAddMemo = () => {
-    const updatedCard = {
+  const [categories, setCategories] = useState([
+    {
       id: crypto.randomUUID(),
-      text: inputValue,
-      memos: [],
-    };
+      name: "家事",
+      items: [
+        { id: crypto.randomUUID(), name: "買い物" },
+        { id: crypto.randomUUID(), name: "洗濯" },
+        { id: crypto.randomUUID(), name: "掃除" },
+        { id: crypto.randomUUID(), name: "申請" },
+      ],
+    },
+    { id: crypto.randomUUID(), name: "仕事", items: [] },
+    { id: crypto.randomUUID(), name: "勉強", items: [] },
+  ]);
 
-    const updatedCards = [...cards, updatedCard];
-    setCards(updatedCards); //新しい入力を可能にする
-    setMemoValue(""); // 入力欄をクリア
+  const [newCategoryName, setNewCategoryName] = useState("");
+
+  // カテゴリごとの記録を保存するための状態を定義
+  const [records, setRecords] = useState({});
+
+  // 選択されたカテゴリのIDを使って、categoriesの中から該当するカテゴリのデータを見つける
+  const selectedCategory = categories.find(
+    (category) => category.id === selectedCategoryId
+  );
+
+  // 新しいカテゴリを追加する関数
+  const handleAddCategory = () => {
+    // 入力フォームが空なら何もしない
+    if (!newCategoryName.trim()) return;
+
+    // 新しいカテゴリのデータを作成
+    const newCategory = {
+      id: crypto.randomUUID(),
+      name: newCategoryName,
+      items: [],
+    };
+    // categoriesの状態を更新する（現在の配列に新しいカテゴリを追加）
+    setCategories([...categories, newCategory]);
+    // 入力フォームを空に戻す
+    setNewCategoryName("");
   };
 
-  return (
-    <div>
-      <h1>タスク追加画面</h1>
-      <input
-        type="text"
-        placeholder="タスク名を入力"
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-      />
-      <button onClick={handleAddCard}>追加</button>
-      <input
-        type="text"
-        placeholder="メモを入力"
-        value={memoValue}
-        onChange={(e) => setMemoValue(e.target.value)}
-      />
-      <button onClick={handleAddMemo}>カテゴリ追加</button>
+  // カテゴリを削除する関数
+  const handleDeleteCategory = (categoryId) => {
+    // 削除したいカテゴリ以外を新しい配列として取得
+    const updatedCategories = categories.filter(
+      (category) => category.id !== categoryId
+    );
+    setCategories(updatedCategories);
 
-      {cards.map((card) => (
-        <div className="card" key={card.id}>
-          <div className="todo">{card.text}</div>
-          <button className="delete" onClick={() => handleDeleteCard(card.id)}>
-            削除
-          </button>
+    // もし削除したカテゴリが選択中だったら、選択を解除する
+    if (selectedCategoryId === categoryId) {
+      setSelectedCategoryId(null);
+    }
+
+    // 記録も削除する
+    const updatedRecords = { ...records };
+    delete updatedRecords[categoryId];
+    setRecords(updatedRecords);
+  };
+
+  // 項目（タスク）を追加する関数
+  const handleAddItem = (categoryId, itemName) => {
+    // 全カテゴリの配列をループして、該当するカテゴリの項目に新しい項目を追加する
+    const updatedCategories = categories.map((category) => {
+      if (category.id === categoryId) {
+        const newItem = { id: crypto.randomUUID(), name: itemName };
+        return { ...category, items: [...category.items, newItem] };
+      }
+      return category;
+    });
+    setCategories(updatedCategories);
+  };
+
+  // 項目（タスク）を削除する関数
+  const handleDeleteItem = (categoryId, itemId) => {
+    // 全カテゴリの配列をループして、該当するカテゴリから項目を削除する
+    const updatedCategories = categories.map((category) => {
+      if (category.id === categoryId) {
+        const filteredItems = category.items.filter(
+          (item) => item.id !== itemId
+        );
+        return { ...category, items: filteredItems };
+      }
+      return category;
+    });
+    setCategories(updatedCategories);
+  };
+
+  // 記録を追加する関数
+  const handleAddRecord = (categoryId, record) => {
+    // recordsの状態を更新する（該当するカテゴリに新しい記録を追加）
+    const currentRecords = records[categoryId] || [];
+    setRecords({
+      ...records,
+      [categoryId]: [...currentRecords, record],
+    });
+  };
+
+  // 記録を削除する関数
+  const handleDeleteRecord = (categoryId, recordId) => {
+    // recordsの状態を更新する（該当するカテゴリから記録を削除）
+    const currentRecords = records[categoryId] || [];
+    const updatedRecordsForCategory = currentRecords.filter(
+      (record) => record.id !== recordId
+    );
+    setRecords({
+      ...records,
+      [categoryId]: updatedRecordsForCategory,
+    });
+  };
+
+  // 画面に表示する内容（JSX）を返す
+  return (
+    <div className="app-container">
+      {/* メニューパネル */}
+      <div className="menu-panel">
+        <button>Hello!</button>
+        <button>To Do</button>
+        <button className="selected">Records</button>
+        <button>Tips</button>
+        <button>Share</button>
+      </div>
+
+      {/* カテゴリリスト */}
+      <div className="left-panel">
+        <h2>カテゴリ一覧</h2>
+        <div className="categories-container">
+          {/* categoriesの状態をループして、各カテゴリごとにCategoryコンポーネントを表示 */}
+          {categories.map((category) => (
+            <Category
+              key={category.id}
+              category={category}
+              isSelected={selectedCategoryId === category.id}
+              onSelect={setSelectedCategoryId}
+              onAddItem={handleAddItem}
+              onDeleteItem={handleDeleteItem}
+              onDeleteCategory={handleDeleteCategory}
+            />
+          ))}
         </div>
-      ))}
+        {/* 新しいカテゴリを追加するための入力フォーム */}
+        <div className="add-category-form">
+          <input
+            type="text"
+            value={newCategoryName}
+            onChange={(e) => setNewCategoryName(e.target.value)}
+            placeholder="新しいジャンルを追加"
+          />
+          <button onClick={handleAddCategory}>追加</button>
+        </div>
+      </div>
+
+      {/* 記録パネル */}
+      <div className="right-panel">
+        {/* RecordPanelコンポーネントを表示 */}
+        <RecordPanel
+          category={selectedCategory}
+          records={records}
+          onAddRecord={handleAddRecord}
+          onDeleteRecord={handleDeleteRecord}
+        />
+      </div>
     </div>
   );
 }
 
-export default App;
+export default App; // Appコンポーネントを他のファイルで使えるようにする
