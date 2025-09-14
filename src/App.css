@@ -1,157 +1,51 @@
-/* アプリ全体のコンテナ */
+/* アプリ全体の並び */
 .app-container {
-  display: flex;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 10px;
-  box-sizing: border-box;
+  display: flex; /* 要素を横に並べる */
+  height: 100vh; /* 画面全体の高さを占める */
+  font-family: sans-serif; /* フォント */
 }
 
-/* メニューパネル（左端） */
-.menu-panel {
-  flex-shrink: 0; /* 縮まないようにする */
-  width: 120px; /* メニューの固定幅 */
-  padding: 10px;
+/* 左側のサイドバー */
+.sidebar {
+  width: 400px; /* サイドバーの幅 */
+  padding: 25px;
+  background-color: #f5deb3;
   border-right: 1px solid #ccc;
+
+  /* ボタンを縦に並べるための設定 */
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px; /* ボタン間の間隔 */
 }
 
-/* メニューボタンの基本スタイル */
-.menu-panel button {
-  width: 100%;
-  padding: 10px;
-  background-color: #f0f0f0;
+/* サイドバーのボタン */
+.sidebar-button {
+  padding: 15px 20px;
+  background-color: #ffffe0;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.2s;
+  border-radius: 20px; /* ボタンの丸みをつける */
+  cursor: pointer; /* カーソルが手の形になる */
+  text-align: left;
+  transition: background-color 0.5s;
+}
+/* マウスを乗せたときのスタイル */
+.sidebar-button:hover {
+  background-color: #d2b48c;
 }
 
-/* 選択されたメニューボタンのスタイル */
-.menu-panel button.selected {
-  background-color: #deb887;
-  font-weight: bold;
+/* 選択中のボタンのスタイル */
+.sidebar-button.active {
+  background-color: #d2b48c;
+  font-weight: bold; /* フォントを太字にする */
 }
 
-/* カテゴリリスト（真ん中） */
-.left-panel {
-  flex: 1; /* 残りのスペースを均等に割り当てる */
-  padding-right: 20px;
-  padding-left: 20px;
-}
-
-/* 記録パネル（右端） */
-.right-panel {
-  flex: 2; /* カテゴリリストの2倍の幅を占める */
+/* メインコンテンツ */
+.main-content {
+  flex-grow: 1; /* 残りのスペースをすべて占める */
   padding: 20px;
-  border-left: 1px solid #ccc;
 }
 
-/* --- ここから下のスタイルは既存のものを維持 --- */
-
-/* 各カテゴリ全体を囲む枠 */
-.category-container {
-  margin-bottom: 40px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  border-radius: 6px;
-  overflow: hidden;
-}
-
-/* カテゴリのヘッダー部分（タイトルと削除ボタンの行） */
-.category-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px;
-  background-color: #deb887;
-  border: 1px solid #ccc;
-  cursor: pointer;
-}
-
-/* カテゴリのタイトル文字 */
-.category-title {
+.current-tab {
+  font-size: 1.2em;
   font-weight: bold;
-  color: #000;
-}
-
-/* 展開/折りたたみアイコン */
-.toggle-icon {
-  margin-right: 10px;
-}
-
-/* カテゴリ削除ボタン */
-.delete-category-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #fff;
-  color: #000;
-  border: 2px solid #000;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  font-size: 22px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.delete-category-btn:hover {
-  background-color: #000;
-  color: #fff;
-}
-
-/* タスク一覧全体 */
-.items-container {
-  padding: 10px 0;
-  background: #fff;
-}
-
-/* 各タスクの1行 */
-.item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 10px;
-  margin-left: 20px;
-  border-left: 1px solid #ccc;
-}
-
-/* タスク名 */
-.item-name {
-  color: #007bff;
-  text-decoration: underline;
-}
-
-/* タスク削除ボタン */
-.delete-item-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #fff;
-  color: #000;
-  border: 1.5px solid #000;
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.delete-item-btn:hover {
-  background-color: #000;
-  color: #fff;
-}
-
-/* カテゴリ追加フォーム、タスク追加フォーム */
-.add-category-form,
-.add-item-form {
-  display: flex;
-  gap: 5px;
-  margin-top: 10px;
 }
