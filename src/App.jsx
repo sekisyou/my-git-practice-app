@@ -1,35 +1,51 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
 
+//関数を実行
 function App() {
-  const [count, setCount] = useState(0)
+  //初期値をToDoに設定
+  const [activeTab, setActiveTab] = useState("To Do"); //状態管理を設定して、初期値を"ToDo"にする
 
+  //表示する中身
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+    // アプリを包むコンテナ
+    <div className="app-container">
+      <div className="sidebar">
+        <h1>タスク管理アプリ</h1>
+
+        {/* メニューボタン */}
+        <button
+          className={`sidebar-button ${activeTab === "To Do" ? "active" : ""}`}
+          onClick={() => setActiveTab("To Do")}
+        >
+          To Do
         </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+
+        <button
+          className={`sidebar-button ${
+            activeTab === "Records" ? "active" : ""
+          }`}
+          onClick={() => setActiveTab("Records")}
+        >
+          Records
+        </button>
+
+        <button
+          className={`sidebar-button ${activeTab === "Share" ? "active" : ""}`}
+          onClick={() => setActiveTab("Share")}
+        >
+          Share
+        </button>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+
+      {/* 選ばれるコンテンツ */}
+      <div className="main-content">
+        {activeTab === "To Do" && <h2>ToDo list</h2>}
+        {activeTab === "Records" && <h2>Records</h2>}
+        {activeTab === "Share" && <h2>Share</h2>}
+      </div>
+    </div>
+  );
 }
 
-export default App
+export default App;
